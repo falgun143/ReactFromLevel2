@@ -18,18 +18,19 @@ import useFormValidation, { Data } from "../components/JobFormValidataion";
 import jobimage from "../../public/jobapplication.png";
 import "./JobForm.css";
 
-export const JobForm = () => {
+const JobForm = () => {
   const { register, handleSubmit, errors, watch } = useFormValidation();
   const navigate = useNavigate();
 
   const position = watch("position");
+  const skills = ["Java", "JavaScript", "C++", "Python"];
 
   const onSubmit = (data: Data) => {
     toast.success("Registration successful! Redirecting...");
     setTimeout(() => navigate("/summary", { state: data }), 4000);
   };
 
-  const skills = ["Java", "JavaScript", "C++", "Python"];
+
 
   return (
     <>
@@ -38,12 +39,12 @@ export const JobForm = () => {
           display: "flex",
           flexDirection: {
             xs: "column",
-            md: "row",
+            lg: "row",
           },
           gap: 5,
         }}
       >
-        <form onSubmit={handleSubmit(onSubmit)} style={{ maxHeight: "680px" }}>
+        <form onSubmit={handleSubmit(onSubmit)} style={{ padding: 0 }}>
           <ToastContainer autoClose={4000} position="top-center" newestOnTop />
 
           <Box
@@ -51,6 +52,10 @@ export const JobForm = () => {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
+              maxWidth: {
+                xs: "100%",
+                lg: "70%",
+              },
               border: 0.1,
               borderColor: "grey.400",
               borderRadius: 2,
@@ -61,20 +66,21 @@ export const JobForm = () => {
               boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
             }}
           >
-            <Typography variant={"h3"} fontWeight="bold" align="center"  >
+            <Typography variant={"h3"} fontWeight="bold" align="center">
               Job Registration Form
             </Typography>
-            <Typography variant={"subtitle1"} style={{color: "#31363F"}} >
-              Take the first step towards your dream job. Register now and complete the form with your details and qualifications to apply today.
+            <Typography variant={"subtitle1"} style={{ color: "#31363F" }}>
+              Take the first step towards your dream job. Register now and complete the form with
+              your details and qualifications to apply today.
             </Typography>
 
             <TextField
               fullWidth
               required
-              label="FullName"
+              label="Full Name"
               {...register("fullname")}
               error={!!errors.fullname}
-              helperText={errors.fullname?.message}
+              helperText={errors.fullname?.message}            
             />
 
             <TextField
@@ -83,16 +89,16 @@ export const JobForm = () => {
               label="Email"
               {...register("email")}
               error={!!errors.email}
-              helperText={errors.email?.message}
+              helperText={errors.email?.message}             
             />
 
             <TextField
               fullWidth
               required
-              label="PhoneNumber"
-              {...register("phonenumber")}
+              label="Phone Number"
+              {...register("phonenumber" ,{valueAsNumber:true})}
               error={!!errors.phonenumber}
-              helperText={errors.phonenumber?.message}
+              helperText={errors.phonenumber?.message}       
             />
 
             <FormControl fullWidth>
@@ -110,15 +116,14 @@ export const JobForm = () => {
               </Select>
             </FormControl>
 
-            {/* Conditional rendering based on selected position */}
             <div className="transition-box">
               {(position === "Developer" || position === "Designer") && (
                 <TextField
                   fullWidth
-                  label="Relevant Experience"
+                  label="Relevant Experience(In Years)"
                   {...register("experience", { valueAsNumber: true })}
                   error={!!errors.experience}
-                  helperText={errors.experience?.message}
+                  helperText={errors.experience?.message}                
                 />
               )}
               {position === "Designer" && (
@@ -127,13 +132,13 @@ export const JobForm = () => {
                   label="Portfolio URL"
                   {...register("portfoliolink")}
                   error={!!errors.portfoliolink}
-                  helperText={errors.portfoliolink?.message}
+                  helperText={errors.portfoliolink?.message}           
                 />
               )}
               {position === "Manager" && (
                 <TextField
                   fullWidth
-                  label="Management Experience"
+                  label="Management Experience(In Years)"
                   {...register("managementexperience", { valueAsNumber: true })}
                   error={!!errors.managementexperience}
                   helperText={errors.managementexperience?.message}
@@ -156,7 +161,6 @@ export const JobForm = () => {
 
             <Box
               sx={{
-                width: "100%",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
@@ -192,7 +196,18 @@ export const JobForm = () => {
           </Box>
         </form>
 
-        <img src={jobimage} height={"700px"} alt="Job Application" />
+        <img
+          src={jobimage}
+          alt="Job Application"
+          style={{
+            maxWidth: "50%", // Initially 50% width
+            height: "auto", // Maintain aspect ratio
+            alignSelf: "center", // Center align vertically within the box
+            objectFit: "cover", // Ensure the image covers the container while maintaining aspect ratio
+            width: "100%", // Adjusts to 100% width on mobile screens
+            marginBottom: "10px" // Added to adjust space between image and form
+          }}
+        />
       </Box>
     </>
   );
